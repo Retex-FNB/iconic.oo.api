@@ -112,8 +112,14 @@ class OdooAPI(http.Controller):
         '/api/<string:model>',
         type='http', auth='user', methods=['GET'], csrf=False)
     def get_model_data(self, model, **params):
+        lang = params.get("lang")
+        req_env = False
         try:
-            records = request.env[model].search([])
+            if lang:
+                req_env = request.env[model].with_context(lang=lang)
+            else:
+                req_env = request.env[model]
+            records = req_env.search([])
         except KeyError as e:
             msg = "The model `%s` does not exist." % model
             res = error_response(e, msg)
@@ -135,7 +141,7 @@ class OdooAPI(http.Controller):
 
         if "filter" in params:
             filters = json.loads(params["filter"])
-            records = request.env[model].search(filters, order=orders)
+            records = req_env.search(filters, order=orders)
 
         prev_page = None
         next_page = None
