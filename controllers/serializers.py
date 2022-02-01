@@ -50,7 +50,7 @@ class Serializer(object):
                 field_name: [record.id for record in rec[field_name] if not isinstance(record.id, NewId)]
             }
         elif field_type in ['many2one']:
-            return {field_name: rec[field_name].id} if not isinstance(record.id, NewId) else {field_name: None}
+            return {field_name: rec[field_name].id} if not isinstance(rec[field_name].id, NewId) else {field_name: None}
         elif field_type == 'datetime' and rec[field_name]:
             return {
                 field_name: rec[field_name].strftime("%Y-%m-%d-%H-%M")
