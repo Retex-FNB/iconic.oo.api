@@ -2,6 +2,8 @@
 import datetime
 from itertools import chain
 
+from odoo.models import NewId
+
 from .parser import Parser
 from .exceptions import QueryFormatError
 
@@ -45,10 +47,10 @@ class Serializer(object):
         field_type = rec.fields_get(field_name).get(field_name).get('type')
         if field_type in ['one2many', 'many2many']:
             return {
-                field_name: [record.id for record in rec[field_name]]
+                field_name: [record.id for record in rec[field_name] if not isinstance(record.id, NewId)]
             }
         elif field_type in ['many2one']:
-            return {field_name: rec[field_name].id}
+            return {field_name: rec[field_name].id} if not isinstance(record.id, NewId) else {field_name: None}
         elif field_type == 'datetime' and rec[field_name]:
             return {
                 field_name: rec[field_name].strftime("%Y-%m-%d-%H-%M")
