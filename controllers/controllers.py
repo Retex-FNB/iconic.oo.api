@@ -265,6 +265,7 @@ class OdooAPI(http.Controller):
             rec = model_to_put.browse(rec_id).ensure_one()
 
         # TODO: Handle data validation
+        """
         for field in data:
             if isinstance(data[field], dict):
                 operations = []
@@ -295,7 +296,7 @@ class OdooAPI(http.Controller):
                 data[field] = [(6, _, data[field])]  # Replace operation
             else:
                 pass
-
+        """
         try:
             return rec.write(data)
         except Exception as e:
@@ -329,6 +330,7 @@ class OdooAPI(http.Controller):
             recs = model_to_put.search(filters)
 
         # TODO: Handle data validation
+        """
         for field in data:
             if isinstance(data[field], dict):
                 operations = []
@@ -359,7 +361,7 @@ class OdooAPI(http.Controller):
                 data[field] = [(6, _, data[field])]  # Replace operation
             else:
                 pass
-
+        """
         if recs.exists():
             try:
                 return recs.write(data)
